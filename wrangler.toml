@@ -6,3 +6,7 @@ main = "src/index.ts"
 binding = "LINK_DB"
 id = "457855dd6cda43f3ace17d8392fd180b"
 preview_id = "567df20ea8bc44f3aa16cbf364cc2285"
+
+[vars]
+WEBMASTER = "Kennan Hunter"
+WEBMASTERLINK = "https://kennan.tech"
