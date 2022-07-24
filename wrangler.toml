@@ -1,6 +1,8 @@
 name = "link"
 compatibility_date = "2022-07-24"
+main = "src/index.ts"
 
 [[kv_namespaces]]
 binding = "LINK_DB"
 id = "457855dd6cda43f3ace17d8392fd180b"
+preview_id = "567df20ea8bc44f3aa16cbf364cc2285"
