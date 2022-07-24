@@ -1,5 +1,6 @@
-/** @type {import('./__types/admin/login').RequestHandler} */
-export async function POST({ request }) {
+import type { RequestHandler } from "@sveltejs/kit";
+
+export const POST: RequestHandler = async ({ request }) => {
 	request.json();
 	let successful = false;
 	let jwt;
@@ -18,4 +19,4 @@ export async function POST({ request }) {
 		},
 		body: {},
 	};
-}
+};
