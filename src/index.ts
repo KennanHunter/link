@@ -3,10 +3,10 @@ import { htmlData } from "./htmlData";
 export interface Env {
 	LINK_DB: KVNamespace;
 	WEBMASTER: string;
-	WEBMASTERLINK: string;
+	WEBMASTER_LINK: string;
 }
 
-async function HtmlResponse(html: string) {
+function HtmlResponse(html: string): Response {
 	return new Response(html, {
 		headers: {
 			"content-type": "text/html;charset=UTF-8",
@@ -20,22 +20,27 @@ export default {
 		env: Env,
 		ctx: ExecutionContext
 	): Promise<Response> {
-		let { pathname, origin } = new URL(request.url);
-		pathname = pathname.substring(1);
-		if (!pathname)
-			return Response.redirect("https://kennan.tech/link", 302);
-		else {
-			const val = await env.LINK_DB.get(pathname);
-			if (val) {
-				return Response.redirect(val, 302);
-			} else {
-				return HtmlResponse(
-					htmlData.error
-						.replace("{WEBMASTER}", env.WEBMASTER)
-						.replace("{WEBMASTERLINK}", env.WEBMASTERLINK)
-						.replace("{VALUE}", "/" + pathname)
-				);
-			}
-		}
+		const url = new URL(request.url);
+		const key = url.pathname.substring(1);
+
+		if (!key)
+			return Response.redirect(
+				"https://kennan.tech/blog/e/url-shortener-cloudflare"
+			);
+
+		// Look up the key from our redirect
+		const redirectValue = await env.LINK_DB.get(key);
+
+		// If the looked up value does not exist (null) return
+		if (!redirectValue)
+			return HtmlResponse(
+				htmlData.error
+					.replace("{WEBMASTER}", env.WEBMASTER)
+					.replace("{WEBMASTER_LINK}", env.WEBMASTER_LINK)
+					.replace("{VALUE}", url.pathname)
+			);
+
+		// Redirect to the looked up value
+		return Response.redirect(redirectValue, 301);
 	},
 };
